@@ -1,0 +1,27 @@
+import streamlit as st
+import plotly.graph_objs as go
+import yfinance as yf
+
+
+# perguntar ao usuario o nome da ação, data inicial e data final e plotar o grafico do preço da ação no final do dia
+st.text('Insira o nome da ação')
+acao = st.text_input('Ação') + '.SA'
+
+st.text('Insira a data inicial')
+data_inicial = st.date_input('Data Inicial')
+
+st.text('Insira a data final')
+data_final = st.date_input('Data Final')
+
+b1 = st.button('Buscar')
+if b1:
+    acao = yf.download(acao, start=data_inicial, end=data_final)
+    fig = go.Figure(data=[go.Candlestick(x=acao.index,
+                                      open=acao['Open'],
+                                      high=acao['High'],
+                                      low=acao['Low'],
+                                      close=acao['Close'])])
+
+    st.plotly_chart(fig)
+    # printar o dataframe
+    st.write(acao)
